@@ -7,9 +7,11 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   }, 
+  "dependencies": {
+    "electron": "^1.4.15"
+  },
   "devDependencies": {
-    "houndify": "1.1.1",
-    "electron": "^1.4.15",
+    "houndify": "1.1.1", 
     "eslint": "^3.12.2",
     "eslint-config-airbnb": "^13.0.0",
     "eslint-plugin-import": "^2.2.0",
