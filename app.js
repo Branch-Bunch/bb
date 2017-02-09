@@ -13,6 +13,6 @@ const requestInfo = {
   Longitude: -121.973936
 }
 
-const queryString = "What is the weather like in Ottawa?
+const queryString = "What is the weather like in Ottawa?"
 
-client.textSearch.query(argv.query || queryString, requestInfo)
+houndify.textSearch.query(argv.query || queryString, requestInfo)
