@@ -1,7 +1,10 @@
-# Logs
+# logs
 logs
 *.log
 npm-debug.log*
 
-# Dependency directories
+# api keys and stuff
+*.env
+
+# node modules
 node_modules
