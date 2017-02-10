@@ -2,10 +2,10 @@
 
 const houndify = require('houndify')
 
-const client = new Houndify.HoundifyClient({
+const Client = new houndify.HoundifyClient({
 
   clientId: "BB_ID",
-  clientKey: "BB_KEY"
+  clientKey: "BB_KEY",
 
   // Voice Activity Detection
   enableVAD: false,
@@ -16,13 +16,15 @@ const client = new Houndify.HoundifyClient({
     method: "GET"
   },
 
-  function onResponse(response, info) {
+  onResponse: function(response, info) {
     console.log(response)
+    conversationState = client.conversation.getState()
+    client.conversation.setState(conversationState)
   },
 
-  function onError(error, info) {
+  onError: function(error, info) {
     console.log(error)
   }  
 })
 
-module.exports = HoundifyClient
+module.exports = Client

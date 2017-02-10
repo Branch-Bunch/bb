@@ -8,9 +8,9 @@ const argv = require('minimist')(process.argv.slice(2))
 
 // refer to https://houndify.com/reference/RequestInfo
 const requestInfo = {
-  ClientID: "BB_ID"
-  Latitude: 37.388309,
-  Longitude: -121.973936
+  ClientID: "BB_ID",
+  Latitude: 43.7,
+  Longitude: -79.4
 }
 
 const queryString = "What is the weather like in Ottawa?"

@@ -7,11 +7,11 @@ const Input = (() => {
     prompt: 'I am BB, witness me > '
   })
 
-  getInput((inputHandler) => {
+  function getInput(inputHandler) {
     rl.on('line', (input) => {
       inputHandler(input)
     })
-  })
+  }
 })()
 
 module.exports = Input
