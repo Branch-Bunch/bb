@@ -1,0 +1,20 @@
+{
+  "name": "bb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^1.4.15"
+  },
+  "dependencies": {
+    "electron-localshortcut": "^1.0.0",
+    "express": "^4.14.1",
+    "houndify": "^1.2.2"
+  }
+}
