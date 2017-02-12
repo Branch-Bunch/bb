@@ -13,7 +13,8 @@
     "body-parser": "^1.16.1",
     "electron-localshortcut": "^1.0.0",
     "express": "^4.14.1",
-    "houndify": "^1.2.2"
+    "houndify": "^1.2.2",
+    "minimist": "^1.2.0"
   },
   "devDependencies": {
     "electron": "^1.4.15"

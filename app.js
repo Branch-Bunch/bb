@@ -1,13 +1,17 @@
 'use strict'
 
 const {app, BrowserWindow} = require('electron')
+const appExpress = require('express')()
 const path = require('path')
 const url = require('url')
-const Window = require('./controllers/window')
+const bodyParser = require('body-parser')
+const QueryWindow = require('./windows/controllers/QueryWindow')
+
+appExpress.use(bodyParser.urlencoded({ extended: true }))
 
 class BB {
   constructor() {
-    this.window = null
+    this.queryWindow = null
   }
 
   init() {
@@ -16,14 +20,15 @@ class BB {
 
   initBB() {
     app.on('ready', () => {
-      this.createWindow()
-      this.window.loadURL(url.format({
-        pathname: path.join(__dirname, 'index.html'),
+      this.createQueryWindow()
+      this.queryWindow.loadURL(url.format({
+        pathname: path.join(__dirname, '/windows/views/index.html'),
         protocol: 'file',
         slashes: true
       })) 
-      this.window.devTools()
+      this.queryWindow.devTools()
 
+      /*
       const {net} = require('electron')
       const request = net.request('http://127.0.0.1:1337')
       request.on('response', (response) => {
@@ -37,19 +42,35 @@ class BB {
         })
       })
       request.end() 
+
+      const requestQuery = net.request({
+        method: 'POST',
+        protocol: 'http:',
+        hostname: '127.0.0.1',
+        port: '1337',
+        path: '/queries'
+      })
+      requestQuery.on('response', (response) => {
+        console.log('worked')
+        responseQuery.on('data', (chunk) => {
+          console.log(`BODY: ${chunk}`)
+        })
+        responseQuery.writeHead(301, { "Location": "http://127.0.0.1:1337" })
+      })
+      requestQuery.end() */
     })
 
     app.on('activate', () => {
-      if (this.window == null) { 
-        this.createWindow() 
+      if (this.queryWindow == null) { 
+        this.createQueryWindow() 
       } else {
-        this.window.show()
+        this.queryWindow.show()
       }
     })
   }
 
-  createWindow() {
-    this.window = new Window()
+  createQueryWindow() {
+    this.queryWindow = new QueryWindow()
   }
 }
 
