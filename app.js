@@ -23,6 +23,20 @@ class BB {
         slashes: true
       })) 
       this.window.devTools()
+
+      const {net} = require('electron')
+      const request = net.request('http://127.0.0.1:1337')
+      request.on('response', (response) => {
+        console.log(`STATUS: ${response.statusCode}`)
+        console.log(`HEADERS: ${JSON.stringify(response.headers)}`)
+        response.on('data', (chunk) => {
+          console.log(`BODY: ${chunk}`)
+        })
+        response.on('end', () => {
+          console.log('no more data in response.')
+        })
+      })
+      request.end() 
     })
 
     app.on('activate', () => {
