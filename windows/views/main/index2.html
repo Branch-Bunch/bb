@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>BB</title>
+
+    <link rel="stylesheet" href="../../../main.css"> 
+  </head>
+
+  <body class="page">
+    <div class="setting-top-bar">
+      <div class="top-bar-left"></div>
+      <div class="top-bar-right"></div>
+      <div class="top-bar-middle">
+        <ul class="title-list">
+          <li>
+            <h1>BB v.0.1.0</h1>
+          </li>
+          <li>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="menu">
+      <section>
+        <form action="/queries" method="POST">
+          <input type="text" placeholder="query" name="query">
+          <button type="submit">Submit</button>
+        </form>
+      </section>
+      <section>
+        <input id="query" type="text" placeholder="typescrub" />
+        <button id="textSearchButton" onclick="textQuery()"></button>
+      </section>
+    </div>
+
+    <script>
+      const HoundifyClient = require('./client')
+      const path = require('path')
+      const argv = require('minimist')(process.argv.slice(2))
+
+      const configFile = argv.config || 'config'
+      const config = require(path.join(__dirname, configFile))
+
+      const requestInfo = {
+        ClientID: config.clientId,
+        UserId: "test_user",
+        Latitude: 37.388309,
+        Longitude: -121.973968
+      }
+
+      function textQuery() {
+        var query = document.getElementById('query').value
+        HoundifyClient.textSearch.query(query, requestInfo)
+      } 
+    </script>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 'use strict'
 
-const {app, BrowserWindow} = require('electron')
+const { app, BrowserWindow } = require('electron')
 const appExpress = require('express')()
 const path = require('path')
 const url = require('url')
@@ -21,11 +21,14 @@ class BB {
   initBB() {
     app.on('ready', () => {
       this.createQueryWindow()
+      this.queryWindow.loadURL('http://localhost:3000')
+      /*
       this.queryWindow.loadURL(url.format({
-        pathname: path.join(__dirname, '/windows/views/index.html'),
+        pathname: path.join(__dirname, '/windows/views/main/index.html'),
         protocol: 'file',
         slashes: true
       })) 
+      */
       this.queryWindow.devTools()
 
       /*

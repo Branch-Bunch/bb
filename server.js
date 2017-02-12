@@ -15,8 +15,7 @@ const config = require(path.join(__dirname, configFile))
 
 const port = config.port || 3030
 
-const windowFile = argv.windows || 'windows'
-app.use(express.static(path.join(__dirname, windowFile)))
+app.use(express.static(path.join(__dirname, 'windows', 'views', 'main')))
 
 app.get('/houndifyAuth', houndify.createAuthenticationHandler({
   clientId: config.clientId,
