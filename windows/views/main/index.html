@@ -4,23 +4,29 @@
     <link rel="stylesheet" href="styles/base.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.css">
     
-    <script src="js/houndify-web-sdk.min.js"></script>
+    <script src="js/houndify-web-sdk.min.js"></script> 
   </head>
 
   <body>
 
     <div class="ui center aligned basic segment container">
-      <h2 class="ui block basic header">Houndify Web SDK Demo</h2>
+      <h2 class="ui block basic header">BB v.0.1.0</h2>
       <form id="form" class="ui form" action="javascript:void(0);">
 
         <div class="ui action big labeled fluid input field">
-          <input id="query" type="text" placeholder="Click on a microphone icon or type in your query" />
+          <div class="ui icon basic label button" onclick="startStopVoiceSearch()">
+            <i id="voiceIcon" class="unmute big icon"></i>
+          </div>
+          <input id="query" type="text" placeholder="I am BB, witness me" />
           <button id="textSearchButton" class="ui icon button" onclick="textQuery()"> 
              <i class="search big icon"></i>
           </button>
         </div>
 
-
+        <div class="ui field" hidden>
+          <label>Output object</label>
+          <textarea id="outputString"></textarea>
+        </div>
         <div class="ui field" hidden>
           <label>Response object</label>
           <textarea id="responseJSON"></textarea>
@@ -35,8 +41,9 @@
 
     <script>     
       
-      const jsonElement = document.getElementById("responseJSON");
-      const infoElement = document.getElementById("infoJSON");
+      const outputElement = document.getElementById("outputString")
+      const jsonElement = document.getElementById("responseJSON")
+      const infoElement = document.getElementById("infoJSON") 
 
       const clientID = "QjotHsDom_UXb2Nl3nn24Q==";
 
@@ -59,38 +66,77 @@
         authURL: "/houndifyAuth",
  
         // Voice Activity Detection 
-        enableVAD: false,
+        enableVAD: true,
 
         textSearchProxy: {
           url: "/textSearchProxy",
           method: "GET"  
         },
 
-        onResponse: function(response, info) {
+        onResponse: function(response, info) { 
           if (response.AllResults && response.AllResults[0] !== undefined) {
-            jsonElement.value = response.stringify(undefined, 2);
-            jsonElement.parentNode.hidden = false;
-            infoElement.value = JSON.stringify(info, undefined, 2);
-            infoElement.parentNode.hidden = false;
-            console.log(response) 
+            outputElement.value = response.AllResults[0].SpokenResponse 
+            outputElement.parentNode.hidden = false  
+            jsonElement.value = response.stringify(undefined, 2)
+            jsonElement.parentNode.hidden = false
+            infoElement.value = JSON.stringify(info, undefined, 2)
+            infoElement.parentNode.hidden = false
+            let conversationState = HoundifyClient.conversation.getState()
+            HoundifyClient.conversation.setState(conversationState)
           }
         },
 
         onError: function(err, info) {
-          jsonElement.parentNode.hidden = true;
-          infoElement.value = JSON.stringify(info, undefined, 2);
-          infoElement.parentNode.hidden = false;
-          document.getElementById("voiceIcon").className = "unmute big icon";
+          jsonElement.parentNode.hidden = true
+          infoElement.value = JSON.stringify(info, undefined, 2)
+          infoElement.parentNode.hidden = false 
+          outputElement.parentNode.hidden = true
+          document.getElementById("voiceIcon").className = "unmute big icon"
           console.log(err)
+        },
+
+        onTranscriptionUpdate: function(transcriptObject) {
+          let transcriptElement = document.getElementById('query')
+          transcriptElement.value = transcriptObject.partialTranscript
+        },
+
+        onAbort: function(info) {
+          console.log(info)
+        },
+
+        onRecordingStarted: function() {
+          document.getElementById('voiceIcon').className = "unmute big icon"
+          document.getElementById('textSearchButton').disabled = false
+          document.getElementById('query').readOnly = false
+        },
+
+        onAudioFrame: function(frame) {
+          console.log(frame)
         }
-      });
+      })
  
       function textQuery() {
-        var query = document.getElementById('query').value;
-        HoundifyClient.textSearch.query(query, requestInfo);
-        jsonElement.parentNode.hidden = true;
-        infoElement.parentNode.hidden = true;
+        var query = document.getElementById('query').value
+        HoundifyClient.textSearch.query(query, requestInfo)
+        outputElement.parentNode.hidden = true
+        jsonElement.parentNode.hidden = true
+        infoElement.parentNode.hidden = true 
       }
+
+      function startStopVoiceSearch() {
+        if (HoundifyClient.voiceSearch.isStreaming()) {
+          HoundifyClient.voiceSearch.stop()
+        } else {
+          HoundifyClient.voiceSearch.startRecording(requestInfo)
+          document.getElementById('voiceIcon').className = 'loading circle notched icon big'
+          document.getElementById('textSearchButton').disabled = true
+          document.getElementById('query').readOnly = true
+          outputElement.parentNode.hidden = true
+          jsonElement.parentNode.hidden = true
+          infoElement.parentNode.hidden = true
+        }
+      }
+        
     </script>
 
   </body>

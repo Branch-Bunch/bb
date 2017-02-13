@@ -7,10 +7,16 @@ const shortcut = require('electron-localshortcut')
 class QueryWindow {
   constructor() {
     this.createQueryWindow()
+    this.initWindowEvents()
+    this.initShortCut()
   }
 
   createQueryWindow() {
-    this.queryWindow = new BrowserWindow({ width: 800, height: 600 })
+    this.queryWindow = new BrowserWindow({ 
+      width: 800, 
+      height: 900,
+      show: true 
+    })
   }
 
   loadURL(url) {
@@ -25,7 +31,7 @@ class QueryWindow {
     this.queryWindow.webContents.openDevTools()
   }
 
-  windowEvents() {
+  initWindowEvents() {
     this.queryWindow.on('close', (e) => {
       if (this.queryWindow.isVisible()) {
         e.preventDefault()
